@@ -5,7 +5,7 @@ import DashboardPreview from "./DashboardPreview";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-slate-950 py-24">
+    <section className="relative overflow-hidden bg-slate-950 py-32">
       <div className="mx-auto flex max-w-7xl flex-col items-center px-6 text-center lg:flex-row lg:justify-between lg:text-left">
 
         {/* Left Content */}
