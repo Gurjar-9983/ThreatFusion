@@ -14,9 +14,13 @@ class AuthService:
 
     @staticmethod
     def register(db: Session, data):
-        if UserRepository.get_by_email(db, data.email):
+        # Check if email already exists
+        existing_user = UserRepository.get_by_email(db, data.email)
+
+        if existing_user:
             raise ValueError("Email already exists")
 
+        # Create new user
         user = User(
             email=data.email,
             full_name=data.full_name,
@@ -27,25 +31,22 @@ class AuthService:
 
     @staticmethod
     def login(db: Session, data):
-        user = UserRepository.get_by_email(
-            db,
-            data.email,
-        )
+        # Find user by email
+        user = UserRepository.get_by_email(db, data.email)
 
         if not user:
             return None
 
-        if not verify_password(
-            data.password,
-            user.hashed_password,
-        ):
+        # Verify password
+        if not verify_password(data.password, user.hashed_password):
             return None
 
-        token = create_access_token(
-            {"sub": str(user.id)}
+        # Generate JWT
+        access_token = create_access_token(
+            data={"sub": str(user.id)}
         )
 
         return {
-            "access_token": token,
+            "access_token": access_token,
             "token_type": "bearer",
         }
