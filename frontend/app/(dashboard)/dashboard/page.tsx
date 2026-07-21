@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 
 import StatCard from "@/components/dashboard/StatCard";
+import AIInsights from "@/components/dashboard/AIInsights";
+import ThreatFeed from "@/components/dashboard/ThreatFeed";
 
 export default function DashboardPage() {
   return (
@@ -51,6 +53,10 @@ export default function DashboardPage() {
           description="Live Feeds"
           icon={Activity}
         />
+        <div className="grid gap-6 lg:grid-cols-2">
+  <AIInsights />
+  <ThreatFeed />
+</div>
 
       </div>
 
