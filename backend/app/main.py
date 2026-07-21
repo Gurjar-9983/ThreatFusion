@@ -7,7 +7,7 @@ from app.api.v1.health import router as health_router
 from app.db.base import Base  # Import Base after models are registered
 from app.db.database import engine
 from app.api.v1.users import router as user_router
-# Create all tables
+from app.api.v1.ioc import router as ioc_router
 
 
 app = FastAPI(
@@ -27,5 +27,9 @@ app.include_router(health_router, prefix="/api/v1")
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(
     user_router,
+    prefix="/api/v1",
+)
+app.include_router(
+    ioc_router,
     prefix="/api/v1",
 )
