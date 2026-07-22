@@ -1,11 +1,11 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-from app.schemas.ioc import IOCCreate, IOCResponse
+from app.schemas.ioc import IOCCreate, IOCUpdate, IOCResponse
 from app.services.ioc_service import IOCService
 
 router = APIRouter(
@@ -30,9 +30,17 @@ def create_ioc(
     response_model=list[IOCResponse],
 )
 def get_iocs(
+    search: str | None = Query(default=None),
+    type: str | None = Query(default=None),
+    severity: str | None = Query(default=None),
     db: Session = Depends(get_db),
 ):
-    return IOCService.get_all(db)
+    return IOCService.get_all(
+        db=db,
+        search=search,
+        ioc_type=type,
+        severity=severity,
+    )
 
 
 @router.get(
@@ -44,6 +52,26 @@ def get_ioc(
     db: Session = Depends(get_db),
 ):
     ioc = IOCService.get_by_id(db, ioc_id)
+
+    if not ioc:
+        raise HTTPException(
+            status_code=404,
+            detail="IOC not found",
+        )
+
+    return ioc
+
+
+@router.put(
+    "/{ioc_id}",
+    response_model=IOCResponse,
+)
+def update_ioc(
+    ioc_id: UUID,
+    data: IOCUpdate,
+    db: Session = Depends(get_db),
+):
+    ioc = IOCService.update(db, ioc_id, data)
 
     if not ioc:
         raise HTTPException(

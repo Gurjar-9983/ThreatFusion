@@ -13,7 +13,11 @@ class IOCCreate(BaseModel):
     source: str = "Manual"
     description: str | None = None
 
-
+class IOCUpdate(BaseModel):
+    severity: str | None = None
+    source: str | None = None
+    description: str | None = None
+    
 class IOCResponse(BaseModel):
     id: UUID
     type: str
