@@ -5,7 +5,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-from app.schemas.ioc import IOCCreate, IOCUpdate, IOCResponse
+from app.schemas.ioc import (
+    IOCCreate,
+    IOCUpdate,
+    IOCResponse,
+    IOCPaginatedResponse,
+)
 from app.services.ioc_service import IOCService
 
 router = APIRouter(
@@ -27,12 +32,14 @@ def create_ioc(
 
 @router.get(
     "",
-    response_model=list[IOCResponse],
+    response_model=IOCPaginatedResponse,
 )
 def get_iocs(
     search: str | None = Query(default=None),
     type: str | None = Query(default=None),
     severity: str | None = Query(default=None),
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=10, ge=1, le=100),
     db: Session = Depends(get_db),
 ):
     return IOCService.get_all(
@@ -40,6 +47,8 @@ def get_iocs(
         search=search,
         ioc_type=type,
         severity=severity,
+        page=page,
+        limit=limit,
     )
 
 

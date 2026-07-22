@@ -13,11 +13,13 @@ class IOCCreate(BaseModel):
     source: str = "Manual"
     description: str | None = None
 
+
 class IOCUpdate(BaseModel):
     severity: str | None = None
     source: str | None = None
     description: str | None = None
-    
+
+
 class IOCResponse(BaseModel):
     id: UUID
     type: str
@@ -31,3 +33,11 @@ class IOCResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+
+class IOCPaginatedResponse(BaseModel):
+    items: list[IOCResponse]
+    page: int
+    limit: int
+    total: int
+    pages: int

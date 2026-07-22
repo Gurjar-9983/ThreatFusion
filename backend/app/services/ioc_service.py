@@ -19,12 +19,16 @@ class IOCService:
         search: str | None = None,
         ioc_type: str | None = None,
         severity: str | None = None,
+        page: int = 1,
+        limit: int = 10,
     ):
         return IOCRepository.get_all(
-            db,
+            db=db,
             search=search,
             ioc_type=ioc_type,
             severity=severity,
+            page=page,
+            limit=limit,
         )
 
     @staticmethod

@@ -1,4 +1,5 @@
 
+from math import ceil
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -31,6 +32,8 @@ class IOCRepository:
         search: str | None = None,
         ioc_type: str | None = None,
         severity: str | None = None,
+        page: int = 1,
+        limit: int = 10,
     ):
         query = db.query(IOC)
 
@@ -43,7 +46,21 @@ class IOCRepository:
         if severity:
             query = query.filter(IOC.severity == severity)
 
-        return query.all()
+        total = query.count()
+
+        items = (
+            query.offset((page - 1) * limit)
+            .limit(limit)
+            .all()
+        )
+
+        return {
+            "items": items,
+            "page": page,
+            "limit": limit,
+            "total": total,
+            "pages": ceil(total / limit) if total else 1,
+        }
 
     @staticmethod
     def get_by_id(db: Session, ioc_id: UUID):
