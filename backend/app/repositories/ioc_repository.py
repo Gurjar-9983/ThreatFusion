@@ -2,27 +2,32 @@
 from math import ceil
 from uuid import UUID
 
+from fastapi import HTTPException
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.ioc import IOC
-from app.schemas.ioc import IOCCreate
+from app.schemas.ioc import IOCCreate, IOCUpdate
 
 
 class IOCRepository:
 
     @staticmethod
-    def create(db: Session, data: IOCCreate) -> IOC:
-        ioc = IOC(
-            type=data.type,
-            value=data.value,
-            severity=data.severity,
-            source=data.source,
-            description=data.description,
-        )
+    def create(db: Session, data: IOCCreate):
+        ioc = IOC(**data.model_dump())
 
         db.add(ioc)
-        db.commit()
-        db.refresh(ioc)
+
+        try:
+            db.commit()
+            db.refresh(ioc)
+
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="IOC already exists",
+            )
 
         return ioc
 
@@ -67,22 +72,26 @@ class IOCRepository:
         return db.query(IOC).filter(IOC.id == ioc_id).first()
 
     @staticmethod
+    def update(db: Session, ioc: IOC, data: IOCUpdate):
+        update_data = data.model_dump(exclude_unset=True)
+
+        for key, value in update_data.items():
+            setattr(ioc, key, value)
+
+        try:
+            db.commit()
+            db.refresh(ioc)
+
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="IOC already exists",
+            )
+
+        return ioc
+
+    @staticmethod
     def delete(db: Session, ioc: IOC):
         db.delete(ioc)
         db.commit()
-
-    @staticmethod
-    def update(db: Session, ioc: IOC, data):
-        if data.severity is not None:
-            ioc.severity = data.severity
-
-        if data.source is not None:
-            ioc.source = data.source
-
-        if data.description is not None:
-            ioc.description = data.description
-
-        db.commit()
-        db.refresh(ioc)
-
-        return ioc
