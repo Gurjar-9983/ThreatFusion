@@ -3,9 +3,9 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from app.integrations.virustotal import VirusTotalClient
 from app.repositories.ioc_repository import IOCRepository
 from app.schemas.ioc import IOCCreate, IOCUpdate
+from app.services.enrichment_service import EnrichmentService
 from app.validators.ioc_validator import validate_ioc
 
 
@@ -67,9 +67,11 @@ class IOCService:
             return None
 
         if ioc.type.lower() != "ip":
-            raise ValueError("VirusTotal enrichment currently supports IP IOCs only.")
+            raise ValueError(
+                "Threat enrichment currently supports IP IOCs only."
+            )
 
-        threat_report = VirusTotalClient.get_ip_report(ioc.value)
+        threat_report = EnrichmentService.enrich_ip(ioc.value)
 
         return {
             "id": str(ioc.id),
