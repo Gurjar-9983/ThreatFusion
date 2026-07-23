@@ -71,6 +71,31 @@ def get_ioc(
     return ioc
 
 
+@router.get(
+    "/{ioc_id}/enrich",
+)
+def enrich_ioc(
+    ioc_id: UUID,
+    db: Session = Depends(get_db),
+):
+    try:
+        report = IOCService.enrich(db, ioc_id)
+
+        if not report:
+            raise HTTPException(
+                status_code=404,
+                detail="IOC not found",
+            )
+
+        return report
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e),
+        )
+
+
 @router.put(
     "/{ioc_id}",
     response_model=IOCResponse,

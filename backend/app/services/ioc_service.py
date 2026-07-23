@@ -3,6 +3,7 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
+from app.integrations.virustotal import VirusTotalClient
 from app.repositories.ioc_repository import IOCRepository
 from app.schemas.ioc import IOCCreate, IOCUpdate
 from app.validators.ioc_validator import validate_ioc
@@ -57,3 +58,22 @@ class IOCService:
 
         IOCRepository.delete(db, ioc)
         return True
+
+    @staticmethod
+    def enrich(db: Session, ioc_id: UUID):
+        ioc = IOCRepository.get_by_id(db, ioc_id)
+
+        if not ioc:
+            return None
+
+        if ioc.type.lower() != "ip":
+            raise ValueError("VirusTotal enrichment currently supports IP IOCs only.")
+
+        threat_report = VirusTotalClient.get_ip_report(ioc.value)
+
+        return {
+            "id": str(ioc.id),
+            "type": ioc.type,
+            "value": ioc.value,
+            "threat_report": threat_report,
+        }
