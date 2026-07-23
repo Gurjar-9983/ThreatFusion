@@ -5,12 +5,16 @@ from sqlalchemy.orm import Session
 
 from app.repositories.ioc_repository import IOCRepository
 from app.schemas.ioc import IOCCreate, IOCUpdate
+from app.validators.ioc_validator import validate_ioc
 
 
 class IOCService:
 
     @staticmethod
     def create(db: Session, data: IOCCreate):
+        # Validate the IOC before saving it
+        validate_ioc(data.type, data.value)
+
         return IOCRepository.create(db, data)
 
     @staticmethod
