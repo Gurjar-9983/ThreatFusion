@@ -13,13 +13,25 @@ class EnrichmentRepository:
         provider: str,
         raw_response: dict,
     ):
-        enrichment = Enrichment(
-            ioc_id=ioc_id,
-            provider=provider,
-            raw_response=raw_response,
+        enrichment = (
+            db.query(Enrichment)
+            .filter(
+                Enrichment.ioc_id == ioc_id,
+                Enrichment.provider == provider,
+            )
+            .first()
         )
 
-        db.add(enrichment)
+        if enrichment:
+            enrichment.raw_response = raw_response
+        else:
+            enrichment = Enrichment(
+                ioc_id=ioc_id,
+                provider=provider,
+                raw_response=raw_response,
+            )
+            db.add(enrichment)
+
         db.commit()
         db.refresh(enrichment)
 
@@ -37,6 +49,5 @@ class EnrichmentRepository:
                 Enrichment.ioc_id == ioc_id,
                 Enrichment.provider == provider,
             )
-            .order_by(Enrichment.created_at.desc())
             .first()
         )

@@ -1,10 +1,27 @@
 
+from datetime import datetime, timedelta, timezone
+
+from app.core.config import settings
 from app.integrations.abuseipdb import AbuseIPDBClient
 from app.integrations.virustotal import VirusTotalClient
 from app.repositories.enrichment_repository import EnrichmentRepository
 
 
 class EnrichmentService:
+
+    @staticmethod
+    def _is_cache_valid(enrichment) -> bool:
+        if enrichment is None:
+            return False
+
+        if enrichment.updated_at is None:
+            return False
+
+        expires_at = enrichment.updated_at + timedelta(
+            hours=settings.ENRICHMENT_CACHE_TTL_HOURS
+        )
+
+        return datetime.now(timezone.utc) < expires_at
 
     @staticmethod
     def enrich_ip(db, ioc):
@@ -26,7 +43,7 @@ class EnrichmentService:
                 provider=provider_name,
             )
 
-            if cached:
+            if EnrichmentService._is_cache_valid(cached):
                 report["providers"][provider_name] = cached.raw_response
                 continue
 

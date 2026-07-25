@@ -12,9 +12,11 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    # Threat Intelligence Providers
     VIRUSTOTAL_API_KEY: str
     ABUSEIPDB_API_KEY: str
+
+    # Cache configuration
+    ENRICHMENT_CACHE_TTL_HOURS: int = 24
 
     model_config = SettingsConfigDict(
         env_file=".env",
