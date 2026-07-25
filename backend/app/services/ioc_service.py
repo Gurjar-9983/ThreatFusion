@@ -71,7 +71,10 @@ class IOCService:
                 "Threat enrichment currently supports IP IOCs only."
             )
 
-        threat_report = EnrichmentService.enrich_ip(ioc.value)
+        threat_report = EnrichmentService.enrich_ip(
+            db=db,
+            ioc=ioc,
+        )
 
         return {
             "id": str(ioc.id),
