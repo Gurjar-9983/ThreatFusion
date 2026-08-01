@@ -25,3 +25,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+VIRUSTOTAL_API_KEY: str
+ABUSEIPDB_API_KEY: str
+NVD_API_KEY: str | None = None

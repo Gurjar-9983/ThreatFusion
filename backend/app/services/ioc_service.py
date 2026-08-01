@@ -75,10 +75,3 @@ class IOCService:
             db=db,
             ioc=ioc,
         )
-
-        return {
-            "id": str(ioc.id),
-            "type": ioc.type,
-            "value": ioc.value,
-            "threat_report": threat_report,
-        }

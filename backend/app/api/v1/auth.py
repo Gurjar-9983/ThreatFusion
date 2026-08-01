@@ -7,7 +7,6 @@ from app.schemas.user import UserCreate, UserLogin, UserResponse
 from app.services.auth_service import AuthService
 
 router = APIRouter(
-    prefix="/auth",
     tags=["Authentication"],
 )
 
@@ -43,4 +42,4 @@ def login(
             detail="Invalid email or password",
         )
 
-    return token
+    return token                       

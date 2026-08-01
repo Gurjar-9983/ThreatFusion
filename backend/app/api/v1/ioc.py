@@ -13,10 +13,8 @@ from app.schemas.ioc import (
 )
 from app.services.ioc_service import IOCService
 
-router = APIRouter(
-    prefix="/iocs",
-    tags=["IOC"],
-)
+router = APIRouter()
+    
 
 
 @router.post(

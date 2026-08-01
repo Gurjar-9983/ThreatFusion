@@ -1,65 +1,63 @@
 
 import httpx
-from fastapi import HTTPException
 
 from app.core.config import settings
 
 
 class VirusTotalClient:
+
     BASE_URL = "https://www.virustotal.com/api/v3"
 
+
     @classmethod
-    def get_ip_report(cls, ip_address: str):
+    def lookup_ip(cls, ip: str):
+
         headers = {
             "x-apikey": settings.VIRUSTOTAL_API_KEY
         }
 
-        url = f"{cls.BASE_URL}/ip_addresses/{ip_address}"
+        response = httpx.get(
+            f"{cls.BASE_URL}/ip_addresses/{ip}",
+            headers=headers,
+            timeout=30,
+        )
 
-        try:
-            response = httpx.get(
-                url,
-                headers=headers,
-                timeout=30,
-            )
+        response.raise_for_status()
 
-            response.raise_for_status()
+        return response.json()
 
-            data = response.json()["data"]
-            attributes = data["attributes"]
-            stats = attributes["last_analysis_stats"]
 
-            return {
-                "ioc": data["id"],
-                "type": "ip",
-                "reputation": attributes.get("reputation", 0),
-                "malicious": stats.get("malicious", 0),
-                "suspicious": stats.get("suspicious", 0),
-                "harmless": stats.get("harmless", 0),
-                "undetected": stats.get("undetected", 0),
-                "last_analysis_date": attributes.get("last_analysis_date"),
-            }
+    @classmethod
+    def lookup_domain(cls, domain: str):
 
-        except httpx.HTTPStatusError as e:
-            if e.response.status_code == 404:
-                raise HTTPException(
-                    status_code=404,
-                    detail="IOC not found in VirusTotal"
-                )
+        headers = {
+            "x-apikey": settings.VIRUSTOTAL_API_KEY
+        }
 
-            if e.response.status_code == 429:
-                raise HTTPException(
-                    status_code=429,
-                    detail="VirusTotal API rate limit exceeded"
-                )
+        response = httpx.get(
+            f"{cls.BASE_URL}/domains/{domain}",
+            headers=headers,
+            timeout=30,
+        )
 
-            raise HTTPException(
-                status_code=e.response.status_code,
-                detail="VirusTotal API error"
-            )
+        response.raise_for_status()
 
-        except httpx.RequestError:
-            raise HTTPException(
-                status_code=503,
-                detail="Unable to connect to VirusTotal"
-            )
+        return response.json()
+
+
+    @classmethod
+    def lookup_url(cls, url_id: str):
+
+        headers = {
+            "x-apikey": settings.VIRUSTOTAL_API_KEY
+        }
+
+        response = httpx.get(
+            f"{cls.BASE_URL}/urls/{url_id}",
+            headers=headers,
+            timeout=30,
+        )
+
+        response.raise_for_status()
+
+        return response.json()
