@@ -35,9 +35,7 @@ def test_enrich_ip_cache_hit():
         vt_mock.assert_not_called()
         abuse_mock.assert_not_called()
 
-from unittest.mock import MagicMock, patch
 
-from app.services.enrichment_service import EnrichmentService
 
 
 def test_enrich_ip_cache_miss():
@@ -75,9 +73,6 @@ def test_enrich_ip_cache_miss():
         assert save_mock.call_count == 2
 
 from datetime import datetime, timedelta, timezone
-from unittest.mock import MagicMock, patch
-
-from app.services.enrichment_service import EnrichmentService
 
 
 def test_enrich_ip_expired_cache():
@@ -118,9 +113,6 @@ def test_enrich_ip_expired_cache():
         assert save_mock.call_count == 2
 
 import pytest
-from unittest.mock import MagicMock, patch
-
-from app.services.enrichment_service import EnrichmentService
 
 
 def test_enrich_ip_provider_failure():
@@ -136,7 +128,5 @@ def test_enrich_ip_provider_failure():
     ), patch(
         "app.services.enrichment_service.VirusTotalClient.get_ip_report",
         side_effect=Exception("VirusTotal unavailable"),
-    ):
-
-        with pytest.raises(Exception, match="VirusTotal unavailable"):
-            EnrichmentService.enrich_ip(db, ioc)
+    ), pytest.raises(Exception, match="VirusTotal unavailable"):
+        EnrichmentService.enrich_ip(db, ioc)

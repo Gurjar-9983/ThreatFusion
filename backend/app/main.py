@@ -4,24 +4,30 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1 import (
     auth,
-    users,
-    ioc,
-    health,
-    reports,
-    cves,
     correlation,
-    intelligence,
+    cves,
     dashboard,
+    health,
+    intelligence,
+    ioc,
+    reports,
+    users,
 )
+from app.core.config import settings
+from app.core.exceptions import generic_exception_handler
+from app.api.v1 import graph
+from app.api.v1 import notifications
 
 app = FastAPI(
     title="ThreatFusion API",
     version="1.0.0",
 )
 
+app.add_exception_handler(Exception, generic_exception_handler)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this in production
+    allow_origins=settings.CORS_ORIGINS,  # Change this in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,6 +85,18 @@ app.include_router(
     dashboard.router,
     prefix="/api/v1/dashboard",
     tags=["Dashboard"],
+)
+
+app.include_router(
+    graph.router,
+    prefix="/api/v1/graph",
+    tags=["Graph"],
+)
+
+app.include_router(
+    notifications.router,
+    prefix="/api/v1/notifications",
+    tags=["Notifications"],
 )
 
 @app.get("/")

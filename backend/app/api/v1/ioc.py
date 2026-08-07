@@ -7,9 +7,9 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.schemas.ioc import (
     IOCCreate,
-    IOCUpdate,
-    IOCResponse,
     IOCPaginatedResponse,
+    IOCResponse,
+    IOCUpdate,
 )
 from app.services.ioc_service import IOCService
 

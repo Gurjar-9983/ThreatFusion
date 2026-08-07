@@ -1,8 +1,10 @@
 
 from app.integrations.epss import EPSSClient
-from app.integrations.nvd import NVDClient
 from app.integrations.kev import KEVClient
 from app.integrations.mitre_attack import MITREAttackClient
+from app.integrations.nvd import NVDClient
+
+
 class CVEService:
 
     @staticmethod
@@ -102,7 +104,7 @@ class CVEService:
                     "kev":  cve.get("id") in kev_catalog,  # Placeholder until KEV integration
                     "published": cve.get("published"),
                     "modified": cve.get("lastModified"),
-                    "attack": attack,
+                    "mitre": attack,
                 }
             )
 

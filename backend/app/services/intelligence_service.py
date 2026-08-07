@@ -1,19 +1,19 @@
 
+from app.core.logger import logger
 from app.integrations.virustotal import VirusTotalClient
 
 
 class IntelligenceService:
 
     @staticmethod
-    def enrich_ip(ip):
+    def enrich_ip(ip: str):
+        logger.info(f"VirusTotal lookup: {ip}")
 
-        data = VirusTotalClient.lookup_ip(ip)
-
-        stats = data["data"]["attributes"]["last_analysis_stats"]
+        report = VirusTotalClient.get_ip_report(ip)
 
         return {
-            "malicious": stats["malicious"],
-            "suspicious": stats["suspicious"],
-            "harmless": stats["harmless"],
-            "undetected": stats["undetected"],
+            "malicious": report["malicious"],
+            "suspicious": report["suspicious"],
+            "harmless": report["harmless"],
+            "undetected": report["undetected"],
         }

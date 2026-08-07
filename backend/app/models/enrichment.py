@@ -1,7 +1,7 @@
 
 import uuid
 
-from sqlalchemy import Column, DateTime, ForeignKey, JSON, String, UniqueConstraint
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 

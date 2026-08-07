@@ -1,4 +1,6 @@
 
+from app.core.logger import logger
+
 from sqlalchemy.orm import Session
 
 from app.repositories.dashboard_repository import DashboardRepository
@@ -11,6 +13,7 @@ from app.schemas.dashboard import (
     TopSource,
 )
 
+logger.info("Dashboard requested")
 
 class DashboardService:
 
@@ -94,10 +97,14 @@ class DashboardService:
             for s in data["top_sources"]
         ]
 
-        return DashboardResponse(
+        response = DashboardResponse(
             overview=overview,
             severity_distribution=severity,
             ioc_type_distribution=types,
             recent_activity=activity,
             top_sources=sources,
         )
+
+        logger.info("Dashboard generated successfully")
+
+        return response

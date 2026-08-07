@@ -5,7 +5,6 @@ from urllib.parse import urlparse
 
 from fastapi import HTTPException
 
-
 DOMAIN_REGEX = re.compile(
     r"^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$"
 )

@@ -6,7 +6,18 @@ from app.services.correlation_service import CorrelationService
 router = APIRouter()
 
 
-@router.post("/")
-def correlate(payload: dict):
+from app.schemas.correlation import (
+    CorrelationRequest,
+    CorrelationResponse,
+)
 
-    return CorrelationService.correlate(payload)
+@router.post(
+    "/",
+    response_model=CorrelationResponse,
+)
+def correlate(
+    payload: CorrelationRequest,
+):
+    return CorrelationService.correlate(
+        payload.model_dump()
+    )

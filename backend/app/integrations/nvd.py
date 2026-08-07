@@ -1,5 +1,5 @@
 
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 
 import httpx
 from fastapi import HTTPException
@@ -63,7 +63,7 @@ class NVDClient:
                 },
             )
 
-        except Exception as e:
+        except (ValueError, KeyError) as e:
             raise HTTPException(
                 status_code=500,
                 detail={

@@ -6,6 +6,9 @@ class Settings(BaseSettings):
     APP_NAME: str = "ThreatFusion API"
     VERSION: str = "1.0.0"
 
+    ENVIRONMENT: str = "development"
+    DEBUG: bool = True
+
     DATABASE_URL: str
 
     SECRET_KEY: str
@@ -14,9 +17,17 @@ class Settings(BaseSettings):
 
     VIRUSTOTAL_API_KEY: str
     ABUSEIPDB_API_KEY: str
+    NVD_API_KEY: str | None = None
 
-    # Cache configuration
     ENRICHMENT_CACHE_TTL_HOURS: int = 24
+
+    # Frontend URL
+    FRONTEND_URL: str = "http://localhost:3000"
+
+    # CORS
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:3000",
+    ]
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -25,6 +36,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-VIRUSTOTAL_API_KEY: str
-ABUSEIPDB_API_KEY: str
-NVD_API_KEY: str | None = None

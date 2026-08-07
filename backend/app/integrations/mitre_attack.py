@@ -26,7 +26,7 @@ class MITREAttackClient:
             try:
                 with open(cls.DATA_FILE, "r") as f:
                     cls._cache = json.load(f)
-            except Exception:
+            except (OSError, json.JSONDecodeError):
                 cls._cache = {}
 
         return cls._cache

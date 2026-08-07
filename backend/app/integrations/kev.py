@@ -25,8 +25,8 @@ class KEVClient:
 
             return cls._cache
 
-        except Exception:
-            return set()
+        except (httpx.RequestError, httpx.HTTPStatusError, ValueError):
+          return set()
 
     @classmethod
     def is_kev(cls, cve_id: str) -> bool:

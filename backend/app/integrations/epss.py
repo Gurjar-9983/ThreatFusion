@@ -33,5 +33,5 @@ class EPSSClient:
 
             return scores
 
-        except Exception:
-            return {}
+        except (httpx.RequestError, httpx.HTTPStatusError, ValueError):
+         return {}

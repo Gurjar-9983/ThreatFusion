@@ -71,8 +71,8 @@ class DashboardRepository:
         recent_activity = (
             db.query(IOC)
             .order_by(IOC.created_at.desc())
-            .limit(10)
-            .limit(5).all()
+            .limit(5)
+            .all()
         )
 
         # Top Sources
