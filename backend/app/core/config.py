@@ -26,6 +26,9 @@ class Settings(BaseSettings):
 
     # CORS
     CORS_ORIGINS: list[str] = [
+    "http://localhost:3000",
+    "https://threatfusion-frontend.onrender.com",
+] = [
         "http://localhost:3000",
     ]
 
