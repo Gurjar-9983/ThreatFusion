@@ -1,0 +1,68 @@
+
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: threatfusion-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: threatfusion
+      POSTGRES_USER: threatfusion
+      POSTGRES_PASSWORD: StrongPassword123!
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: threatfusion-backend
+
+    restart: unless-stopped
+
+    depends_on:
+      - postgres
+
+    env_file:
+      - ./backend/.env.docker
+
+    environment:
+      DATABASE_URL: postgresql://threatfusion:StrongPassword123!@postgres:5432/threatfusion
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: threatfusion-frontend
+
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:8000
+
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
