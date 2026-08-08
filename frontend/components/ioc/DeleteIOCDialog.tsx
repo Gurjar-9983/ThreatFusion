@@ -47,15 +47,15 @@ export default function DeleteIOCDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button
+      <AlertDialogTrigger
+        render={<Button
           variant="destructive"
           size="sm"
           onClick={(e) => e.stopPropagation()}
         >
           🗑 Delete
-        </Button>
-      </AlertDialogTrigger>
+        </Button>}
+      />
 
       <AlertDialogContent className="border-slate-800 bg-slate-900 text-white">
         <AlertDialogHeader>

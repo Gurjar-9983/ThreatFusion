@@ -1,10 +1,13 @@
-
 import { useQuery } from "@tanstack/react-query";
-import { getCVEs } from "@/lib/services/cve";
 
-export function useCVEs() {
+import {
+  getCVEs,
+  type CVEQuery,
+} from "@/lib/services/cve";
+
+export function useCVEs(params: CVEQuery = {}) {
   return useQuery({
-    queryKey: ["cves"],
-    queryFn: getCVEs,
+    queryKey: ["cves", params],
+    queryFn: () => getCVEs(params),
   });
 }

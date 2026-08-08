@@ -76,15 +76,17 @@ export default function EditIOCModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
+      <DialogTrigger
+        render={
+          <Button
           size="sm"
           variant="outline"
           onClick={(e) => e.stopPropagation()}
         >
           ✏️ Edit
         </Button>
-      </DialogTrigger>
+        }
+      />
 
       <DialogContent className="border-slate-800 bg-slate-900 text-white">
         <DialogHeader>

@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { createIOC } from "@/lib/services/ioc";
+import type { CreateIOCRequest, IOCType } from "@/lib/types/ioc";
 
 import {
   Dialog,
@@ -22,15 +23,15 @@ export default function CreateIOCModal() {
 
   const [open, setOpen] = useState(false);
 
-  const [form, setForm] = useState({
-    type: "ip",
-    value: "",
-    severity: "low",
-    source: "",
-    description: "",
-  });
+  const [form, setForm] = useState<CreateIOCRequest>({
+  type: "ip",
+  value: "",
+  severity: "low",
+  source: "",
+  description: "",
+});
 
-  const mutation = useMutation({
+const mutation = useMutation({
     mutationFn: createIOC,
 
     onSuccess: async () => {
@@ -74,9 +75,13 @@ export default function CreateIOCModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>Add IOC</Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button>
+            Add IOC
+          </Button>
+        }
+      />
 
       <DialogContent className="border-slate-800 bg-slate-900 text-white">
         <DialogHeader>

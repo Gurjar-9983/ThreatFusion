@@ -39,7 +39,7 @@ export default function CVEFilters({
 
       <Select
         value={severity}
-        onValueChange={onSeverityChange}
+        onValueChange={(value) => onSeverityChange(value ?? "")}
       >
         <SelectTrigger>
           <SelectValue placeholder="All Severities" />

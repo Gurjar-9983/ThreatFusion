@@ -1,5 +1,6 @@
-
 "use client";
+
+import type { IOC } from "@/lib/types/ioc";
 
 import { useState } from "react";
 
