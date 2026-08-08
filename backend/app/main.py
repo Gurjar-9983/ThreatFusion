@@ -27,7 +27,10 @@ app.add_exception_handler(Exception, generic_exception_handler)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,  # Change this in production
+    allow_origins=[
+        "http://localhost:3000",
+        "https://threatfusion-frontend.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
