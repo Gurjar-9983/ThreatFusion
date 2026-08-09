@@ -1,4 +1,3 @@
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,15 +20,11 @@ class Settings(BaseSettings):
 
     ENRICHMENT_CACHE_TTL_HOURS: int = 24
 
-    # Frontend URL
     FRONTEND_URL: str = "http://localhost:3000"
 
-    # CORS
     CORS_ORIGINS: list[str] = [
-    "http://localhost:3000",
-    "https://threatfusion-frontend.onrender.com",
-] = [
         "http://localhost:3000",
+        "https://threatfusion-frontend.onrender.com",
     ]
 
     model_config = SettingsConfigDict(
