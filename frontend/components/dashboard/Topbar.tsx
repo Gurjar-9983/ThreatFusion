@@ -94,7 +94,7 @@ export default function Topbar() {
                 type="button"
                 onClick={() => {
                   setOpen(false);
-                  router.push("/settings");
+                  router.push("/dashboard/settings");
                 }}
                 className="flex w-full items-center gap-3 px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
               >
