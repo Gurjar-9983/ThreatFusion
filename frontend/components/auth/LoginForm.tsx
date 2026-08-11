@@ -17,7 +17,6 @@ export default function LoginForm() {
     e.preventDefault();
 
     console.log("Email:", email);
-    console.log("Password:", password);
 
     try {
       const result = await login.mutateAsync({

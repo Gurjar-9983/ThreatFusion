@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import LoginForm from "@/components/auth/LoginForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-950">
       <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-8 shadow-xl">
@@ -12,18 +12,18 @@ export default function LoginPage() {
         </h1>
 
         <p className="mb-8 text-center text-slate-400">
-          Sign in to your account
+          Create your security analyst account
         </p>
 
-        <LoginForm />
+        <RegisterForm />
 
         <p className="mt-6 text-center text-sm text-slate-400">
-          Don't have an account?{" "}
+          Already have an account?{" "}
           <Link
-            href="/register"
+            href="/login"
             className="font-medium text-cyan-400 hover:text-cyan-300"
           >
-            Create account
+            Sign in
           </Link>
         </p>
       </div>
