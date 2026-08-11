@@ -12,29 +12,36 @@ export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     setError("");
+    setSuccess("");
     setLoading(true);
 
     try {
       await register({
-        full_name: fullName,
-        email,
+        full_name: fullName.trim(),
+        email: email.trim(),
         password,
       });
 
-      router.push("/login");
+      setSuccess("Account created successfully. Redirecting to login...");
+
+      setTimeout(() => {
+        router.push("/login");
+        router.refresh();
+      }, 1000);
     } catch (err: any) {
       const message =
         err?.response?.data?.detail ||
+        err?.response?.data?.message ||
         "Unable to create account. Please try again.";
 
       setError(message);
-    } finally {
       setLoading(false);
     }
   }
@@ -44,6 +51,12 @@ export default function RegisterForm() {
       {error && (
         <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
           {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-400">
+          {success}
         </div>
       )}
 
@@ -58,7 +71,8 @@ export default function RegisterForm() {
           onChange={(e) => setFullName(e.target.value)}
           placeholder="Your name"
           required
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-cyan-500"
+          disabled={loading}
+          className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-cyan-500 disabled:opacity-50"
         />
       </div>
 
@@ -73,7 +87,8 @@ export default function RegisterForm() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           required
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-cyan-500"
+          disabled={loading}
+          className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-cyan-500 disabled:opacity-50"
         />
       </div>
 
@@ -89,7 +104,8 @@ export default function RegisterForm() {
           placeholder="••••••••"
           minLength={8}
           required
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-cyan-500"
+          disabled={loading}
+          className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-cyan-500 disabled:opacity-50"
         />
       </div>
 
