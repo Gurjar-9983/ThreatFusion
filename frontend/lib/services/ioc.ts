@@ -23,7 +23,7 @@ export async function getIOCs(
 export async function createIOC(
   data: CreateIOCRequest
 ) {
-  const response = await api.post("/ioc/iocs", data);
+  const response = await api.post("/iocs", data);
 
   return response.data;
 }
@@ -32,7 +32,7 @@ export async function getIOCEnrichment(
   id: string
 ): Promise<IOCEnrichmentResponse> {
   const response = await api.get<IOCEnrichmentResponse>(
-    `/ioc/iocs/${id}/enrich`
+     `/iocs/${id}/enrich`
   );
 
   return response.data;
@@ -43,7 +43,7 @@ export async function updateIOC(
   data: UpdateIOCRequest
 ) {
   const response = await api.put(
-    `/ioc/iocs/${id}`,
+    `/iocs/${id}`,
     data
   );
 
@@ -52,7 +52,7 @@ export async function updateIOC(
 
 export async function deleteIOC(id: string) {
   const response = await api.delete(
-    `/ioc/iocs/${id}`
+    `/iocs/${id}`
   );
 
   return response.data;
