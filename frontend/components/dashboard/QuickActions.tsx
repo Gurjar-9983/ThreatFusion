@@ -14,7 +14,7 @@ const actions = [
   {
     title: "Add IOC",
     description: "Create a new indicator",
-    href: "/ioc",
+    href: "/dashboard/ioc",
     icon: Plus,
     color:
       "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
@@ -22,7 +22,7 @@ const actions = [
   {
     title: "Threat Feed",
     description: "View live threats",
-    href: "/threat-feed",
+    href: "/dashboard/threat-feed",
     icon: Shield,
     color:
       "bg-red-500/10 text-red-400 border-red-500/20",
@@ -30,7 +30,7 @@ const actions = [
   {
     title: "Latest CVEs",
     description: "Browse vulnerabilities",
-    href: "/cves",
+    href: "/dashboard/cves",
     icon: Bug,
     color:
       "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
@@ -38,7 +38,7 @@ const actions = [
   {
     title: "Reports",
     description: "Generate intelligence reports",
-    href: "/reports",
+    href: "/dashboard/reports",
     icon: FileText,
     color:
       "bg-green-500/10 text-green-400 border-green-500/20",
