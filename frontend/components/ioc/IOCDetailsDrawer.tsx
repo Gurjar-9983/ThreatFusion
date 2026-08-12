@@ -89,7 +89,7 @@ export default function IOCDetailsDrawer({
           </SheetTitle>
         </SheetHeader>
 
-        <div className="mt-8 space-y-8">
+        <div className="mt-8 flex-1 space-y-8 overflow-y-auto px-1 pb-32">
 
           {/* IOC */}
 
@@ -173,7 +173,7 @@ export default function IOCDetailsDrawer({
 
           {/* Actions */}
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+          <div className="sticky bottom-0 z-20 rounded-xl border border-slate-800 bg-slate-900/95 p-5 shadow-2xl backdrop-blur">
             <div className="grid grid-cols-2 gap-3">
 
               <Button>
