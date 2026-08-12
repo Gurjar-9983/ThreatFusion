@@ -3,6 +3,7 @@
 import type { IOC } from "@/lib/types/ioc";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { useIOCs } from "@/lib/hooks/useIOCs";
 
@@ -15,14 +16,16 @@ import IOCBadge from "./IOCBadge";
 import RiskBadge from "./RiskBadge";
 import RelativeTime from "./RelativeTime";
 import IOCDetailsDrawer from "./IOCDetailsDrawer";
+
 export default function IOCTable() {
+  const queryClient = useQueryClient();
+
   const [search, setSearch] = useState("");
+  const [selectedIOC, setSelectedIOC] = useState<IOC | null>(null);
 
   const { data, isLoading } = useIOCs(search);
 
   const iocs = data?.items ?? [];
-  const [selectedIOC, setSelectedIOC] =
-  useState<IOC | null>(null);
 
   function calculateRisk(severity: string) {
     switch (severity.toLowerCase()) {
@@ -38,6 +41,14 @@ export default function IOCTable() {
       default:
         return 10;
     }
+  }
+
+  function refreshIOCs() {
+    queryClient.invalidateQueries({
+      queryKey: ["iocs"],
+    });
+
+    setSelectedIOC(null);
   }
 
   if (isLoading) {
@@ -77,17 +88,29 @@ export default function IOCTable() {
 
             <tr className="text-left text-sm uppercase tracking-wide text-slate-400">
 
-              <th className="px-4 py-3">Type</th>
+              <th className="px-4 py-3">
+                Type
+              </th>
 
-              <th className="px-4 py-3">Indicator</th>
+              <th className="px-4 py-3">
+                Indicator
+              </th>
 
-              <th className="px-4 py-3">Risk</th>
+              <th className="px-4 py-3">
+                Risk
+              </th>
 
-              <th className="px-4 py-3">Severity</th>
+              <th className="px-4 py-3">
+                Severity
+              </th>
 
-              <th className="px-4 py-3">Source</th>
+              <th className="px-4 py-3">
+                Source
+              </th>
 
-              <th className="px-4 py-3">Updated</th>
+              <th className="px-4 py-3">
+                Updated
+              </th>
 
               <th className="px-4 py-3 text-center">
                 Actions
@@ -126,13 +149,19 @@ export default function IOCTable() {
                 </td>
 
                 <td className="px-4 py-4">
+
                   <RiskBadge
                     score={calculateRisk(ioc.severity)}
                   />
+
                 </td>
 
                 <td className="px-4 py-4">
-                  <IOCBadge severity={ioc.severity} />
+
+                  <IOCBadge
+                    severity={ioc.severity}
+                  />
+
                 </td>
 
                 <td className="px-4 py-4">
@@ -140,27 +169,28 @@ export default function IOCTable() {
                 </td>
 
                 <td className="px-4 py-4">
+
                   <RelativeTime
                     date={ioc.updated_at}
                   />
+
                 </td>
 
-                <td className="px-4 py-4">
+                <td
+                  className="px-4 py-4"
+                  onClick={(e) => e.stopPropagation()}
+                >
 
                   <div className="flex justify-center gap-2">
 
-                    <EditIOCModal ioc={ioc} />
-
-                    <DeleteIOCDialog ioc={ioc} />
-                    <IOCDetailsDrawer
-                      open={selectedIOC !== null}
-                      onOpenChange={(open) => {
-                         if (!open) {
-                            setSelectedIOC(null);
-                           }
-                          }}
-                       ioc={selectedIOC}
+                    <EditIOCModal
+                      ioc={ioc}
                     />
+
+                    <DeleteIOCDialog
+                      ioc={ioc}
+                    />
+
                   </div>
 
                 </td>
@@ -174,6 +204,7 @@ export default function IOCTable() {
         </table>
 
         {iocs.length === 0 && (
+
           <div className="p-12 text-center">
 
             <div className="text-5xl">
@@ -189,9 +220,23 @@ export default function IOCTable() {
             </p>
 
           </div>
+
         )}
 
       </div>
+
+      {/* IOC Details Drawer */}
+
+      <IOCDetailsDrawer
+        open={selectedIOC !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedIOC(null);
+          }
+        }}
+        onDeleted={refreshIOCs}
+        ioc={selectedIOC}
+      />
 
     </div>
   );
