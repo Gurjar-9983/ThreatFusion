@@ -1,7 +1,8 @@
-
 "use client";
 
 import { IOC } from "@/lib/types/ioc";
+import { downloadIOCReport } from "@/lib/services/report";
+import { toast } from "sonner";
 
 import {
   Sheet,
@@ -14,7 +15,6 @@ import IOCBadge from "./IOCBadge";
 import IOCTypeIcon from "./IOCTypeIcon";
 import RelativeTime from "./RelativeTime";
 import RiskBadge from "./RiskBadge";
-import Timeline from "@/components/dashboard/Timeline";
 import { Button } from "../ui/button";
 
 interface Props {
@@ -37,6 +37,18 @@ export default function IOCDetailsDrawer({
       ? 68
       : 28;
 
+  async function handleExportPDF() {
+    if (!ioc) return;
+
+    try {
+      await downloadIOCReport(ioc.id);
+      toast.success("PDF downloaded successfully");
+    } catch (error) {
+      console.error("PDF download failed:", error);
+      toast.error("Failed to download PDF");
+    }
+  }
+
   return (
     <Sheet
       open={open}
@@ -57,13 +69,11 @@ export default function IOCDetailsDrawer({
           {/* IOC */}
 
           <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-
             <div className="flex items-center gap-3">
 
               <IOCTypeIcon type={ioc.type} />
 
               <div>
-
                 <p className="text-sm text-slate-400">
                   Indicator
                 </p>
@@ -71,11 +81,9 @@ export default function IOCDetailsDrawer({
                 <h2 className="font-mono text-lg text-cyan-300">
                   {ioc.value}
                 </h2>
-
               </div>
 
             </div>
-
           </div>
 
           {/* Threat Score */}
@@ -154,6 +162,35 @@ export default function IOCDetailsDrawer({
 
           </div>
 
+          {/* Actions */}
+
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <Button>
+                Enrich IOC
+              </Button>
+
+              <Button
+                variant="secondary"
+                onClick={handleExportPDF}
+              >
+                Export PDF
+              </Button>
+
+              <Button variant="outline">
+                Share
+              </Button>
+
+              <Button variant="destructive">
+                Delete
+              </Button>
+
+            </div>
+
+          </div>
+
         </div>
       </SheetContent>
     </Sheet>
@@ -169,33 +206,13 @@ function Item({
 }) {
   return (
     <div className="flex items-center justify-between">
-
       <span className="text-slate-400">
         {label}
       </span>
 
-      <div>{value}</div>
-      <div className="grid grid-cols-2 gap-3">
-
-    <Button>
-        Enrich IOC
-    </Button>
-
-    <Button variant="secondary">
-        Export PDF
-    </Button>
-
-    <Button variant="outline">
-        Share
-    </Button>
-
-    <Button variant="destructive">
-        Delete
-    </Button>
-
-</div>
-
+      <div>
+        {value}
+      </div>
     </div>
   );
 }
-<Timeline />
